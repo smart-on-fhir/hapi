@@ -1,0 +1,11 @@
+FROM java:8
+
+ADD https://github.com/jamesagnew/hapi-fhir/releases/download/v3.2.0/hapi-fhir-3.2.0-cli.tar.bz2 /tmp/hapi-fhir-3.2.0-cli/
+RUN mkdir /app && tar xvjf /tmp/hapi-fhir-3.2.0-cli/hapi-fhir-3.2.0-cli.tar.bz2 -C /app/
+RUN rm -rf /tmp/hapi-fhir-3.2.0-cli
+# COPY ./hapi-fhir-3.2.0-cli /app
+COPY ./databases/r3/smart /data
+
+EXPOSE 8080
+
+CMD cd /data && /app/hapi-fhir-cli run-server --allow-external-refs --disable-referential-integrity --fhirversion dstu3
