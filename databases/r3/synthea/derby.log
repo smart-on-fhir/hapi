@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon May 21 16:07:38 UTC 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.1.0 - (1808820): instance a816c00e-0163-8374-b380-0000070eb390 
+on database directory /data/target/jpaserver_derby_files with class loader sun.misc.Launcher$AppClassLoader@7f31245a 
+Loaded from file:/app/hapi-fhir-cli.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_111-8u111-b14-2~bpo8+1-b14
+user.dir=/data
+os.name=Linux
+os.arch=amd64
+os.version=4.9.87-linuxkit-aufs
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
