@@ -72,3 +72,11 @@ To add data to an image:
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2`
     - **`push :`** `docker push smartonfhir/hapi:r2`
 
+
+
+### WARNING!
+The folder /databases/r2/full/target contains some files that are bigger then the GitHub restrictions. These files cannot not be uploaded and you will not get anything when you clone or pull the project. Instead you can do the following:
+1. The biggest chunk of the data is already available so start with it by copying /databases/r2/synthea/target to /databases/r2/full/target
+2. Start the server - `docker run -it -p 8080:8080 -v /absolute/path/to/project/databases/r2/full/target:/data smartonfhir/hapi:r2-empty`
+3. Insert the dstu2-smart patients
+4. Insert the dstu2-custom data
