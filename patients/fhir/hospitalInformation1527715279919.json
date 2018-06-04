@@ -1,0 +1,216 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:2d89a214-88e3-4ba1-9af8-c9d8cb43e772",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "2d89a214-88e3-4ba1-9af8-c9d8cb43e772",
+        "extension": [
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-encounters-extension",
+            "valueInteger": 3
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-procedures-extension",
+            "valueInteger": 0
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-labs-extension",
+            "valueInteger": 0
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-prescriptions-extension",
+            "valueInteger": 0
+          }
+        ],
+        "identifier": [
+          {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "2d89a214-88e3-4ba1-9af8-c9d8cb43e772"
+          }
+        ],
+        "name": "FAIRVIEW HOSPITAL",
+        "address": [
+          {
+            "line": [
+              "29 LEWIS AVENUE"
+            ],
+            "city": "GREAT BARRINGTON",
+            "state": "MA",
+            "postalCode": "01230"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:b60fd6b9-bafb-49be-82e4-f9ea6ae450f7",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "b60fd6b9-bafb-49be-82e4-f9ea6ae450f7",
+        "extension": [
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-encounters-extension",
+            "valueInteger": 71
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-procedures-extension",
+            "valueInteger": 3
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-labs-extension",
+            "valueInteger": 0
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-prescriptions-extension",
+            "valueInteger": 5
+          }
+        ],
+        "identifier": [
+          {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "b60fd6b9-bafb-49be-82e4-f9ea6ae450f7"
+          }
+        ],
+        "name": "ATHOL MEMORIAL HOSPITAL",
+        "address": [
+          {
+            "line": [
+              "2033 MAIN STREET"
+            ],
+            "city": "ATHOL",
+            "state": "MA",
+            "postalCode": "01331"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:956bee2a-1952-48ab-8d1c-611c005717e7",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "956bee2a-1952-48ab-8d1c-611c005717e7",
+        "extension": [
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-encounters-extension",
+            "valueInteger": 483
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-procedures-extension",
+            "valueInteger": 23
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-labs-extension",
+            "valueInteger": 0
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-prescriptions-extension",
+            "valueInteger": 29
+          }
+        ],
+        "identifier": [
+          {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "956bee2a-1952-48ab-8d1c-611c005717e7"
+          }
+        ],
+        "name": "BOSTON CHILDREN'S HOSPITAL",
+        "address": [
+          {
+            "line": [
+              "300 LONGWOOD AVENUE"
+            ],
+            "city": "BOSTON",
+            "state": "MA",
+            "postalCode": "02115"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:4419584c-605c-40ef-b955-7899858b4a1b",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "4419584c-605c-40ef-b955-7899858b4a1b",
+        "extension": [
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-encounters-extension",
+            "valueInteger": 3230
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-procedures-extension",
+            "valueInteger": 1690
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-labs-extension",
+            "valueInteger": 225
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-prescriptions-extension",
+            "valueInteger": 214
+          }
+        ],
+        "identifier": [
+          {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "4419584c-605c-40ef-b955-7899858b4a1b"
+          }
+        ],
+        "name": "SHRINERS' HOSPITAL FOR CHILDREN (THE)",
+        "address": [
+          {
+            "line": [
+              "516 CAREW STREET"
+            ],
+            "city": "SPRINGFIELD",
+            "state": "MA",
+            "postalCode": "01104"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:2d3c549c-f4e7-48aa-acb0-0fe7bbe7b467",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "2d3c549c-f4e7-48aa-acb0-0fe7bbe7b467",
+        "extension": [
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-encounters-extension",
+            "valueInteger": 18659
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-procedures-extension",
+            "valueInteger": 11789
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-labs-extension",
+            "valueInteger": 1824
+          },
+          {
+            "url": "http://synthetichealth.github.io/synthea/utilization-prescriptions-extension",
+            "valueInteger": 1496
+          }
+        ],
+        "identifier": [
+          {
+            "system": "https://github.com/synthetichealth/synthea",
+            "value": "2d3c549c-f4e7-48aa-acb0-0fe7bbe7b467"
+          }
+        ],
+        "name": "SHRINERS' HOSPITAL FOR CHILDREN - BOSTON, THE",
+        "address": [
+          {
+            "line": [
+              "51 BLOSSOM STREET"
+            ],
+            "city": "BOSTON",
+            "state": "MA",
+            "postalCode": "02114"
+          }
+        ]
+      }
+    }
+  ]
+}
