@@ -39,52 +39,52 @@ perform different builds. The supported build-args are:
 - `CLI_OPTS` - CLI args passed to java. Defaults to `-Xmx900m` but the memory might have to be increased for bigger databases.
 
 - R3 EMPTY
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-empty --build-arg FHIR=dstu3 .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r3-empty --build-arg FHIR=dstu3 --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-empty`
     - **`push :`** `docker push smartonfhir/hapi:r3-empty`
 
 - R3 SMART
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-smart --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/smart .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r3-smart --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/smart --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-smart`
     - **`push :`** `docker push smartonfhir/hapi:r3-smart`
 
 - R3 SYNTHEA
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-synthea --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/synthea --build-arg CLI_OPTS=-Xmx1024m .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r3-synthea --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/synthea --build-arg CLI_OPTS=-Xmx1024m --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-synthea`
     - **`push :`** `docker push smartonfhir/hapi:r3-synthea`
 
 - R3 SAMPLE
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-sample --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/sample --build-arg CLI_OPTS=-Xmx1024m .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r3-sample --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/sample --build-arg CLI_OPTS=-Xmx1024m --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-sample`
     - **`push :`** `docker push smartonfhir/hapi:r3-sample`
 
 - R3 FULL
-    - **`build:`** `docker build -t smartonfhir/hapi:r3 --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/full --build-arg CLI_OPTS=-Xmx2048m .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r3 --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/full --build-arg CLI_OPTS=-Xmx2048m --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3`
     - **`push :`** `docker push smartonfhir/hapi:r3`
 
 - R2 EMPTY
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-empty --build-arg FHIR=dstu2 .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r2-empty --build-arg FHIR=dstu2 --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-empty`
     - **`push :`** `docker push smartonfhir/hapi:r2-empty`
 
 - R2 SMART
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-smart --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/smart .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r2-smart --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/smart --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-smart`
     - **`push :`** `docker push smartonfhir/hapi:r2-smart`
 
 - R2 SYNTHEA
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-synthea --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/synthea --build-arg CLI_OPTS=-Xmx1024m .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r2-synthea --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/synthea --build-arg CLI_OPTS=-Xmx1024m --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-synthea`
     - **`push :`** `docker push smartonfhir/hapi:r2-synthea`
 
 - R2 SAMPLE
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-sample --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/sample --build-arg CLI_OPTS=-Xmx1024m .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r2-sample --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/sample --build-arg CLI_OPTS=-Xmx1024m --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-sample`
     - **`push :`** `docker push smartonfhir/hapi:r2-sample`
 
 - R2 FULL
-    - **`build:`** `docker build -t smartonfhir/hapi:r2 --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/full --build-arg CLI_OPTS=-Xmx2048m .`
+    - **`build:`** `docker build -t smartonfhir/hapi:r2 --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/full --build-arg CLI_OPTS=-Xmx2048m --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2`
     - **`push :`** `docker push smartonfhir/hapi:r2`
 
