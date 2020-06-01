@@ -38,6 +38,15 @@ perform different builds. The supported build-args are:
 - `FHIR` - the fhir version. One of `dstu3`, `dstu2`.
 - `CLI_OPTS` - CLI args passed to java. Defaults to `-Xmx900m` but the memory might have to be increased for bigger databases.
 
+- R5 EMPTY
+    - Not working yet. Produces errors: Despite documentation, r5 option is unsupported by `run-server`
+    - docker build -t hapi-r5:empty --build-arg FHIR=r5 .
+    - docker run -it -p 8080:8080 hapi-r5:empty
+
+- R4 SYNTHEA
+    - **`build:`** `docker build -t smartonfhir/hapi:r4-synthea --build-arg FHIR=r4 --build-arg DATA=./databases/r4/synthea --build-arg CLI_OPTS=-Xmx1024m --squash .`
+    - **`run  :`** `docker run -it -p 8080:8080 {image name/tag}`
+
 - R3 EMPTY
     - **`build:`** `docker build -t smartonfhir/hapi:r3-empty --build-arg FHIR=dstu3 --squash .`
     - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-empty`
