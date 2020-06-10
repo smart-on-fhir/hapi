@@ -1,3 +1,6 @@
+# This version of the Dockerfile allows
+# specifying FHIR version on build
+# e.g. `--build-arg FHIR=r2`
 FROM openjdk:11
 
 ARG DATA=./databases/empty
