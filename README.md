@@ -1,117 +1,156 @@
 # HAPI Fhir Server
 
-
-To (re-)build an image you need to run `docker build` and provide a tag, fhir version and data directory (unless you are building the empty servers)
-See **build** examples below.
-
-To run an image you should do `docker run -p {PORT}:8080 smartonfhir/{TAG}` replacing the {PORT} and {TAG} with whatever you need.
-
-To update an image use `docker push smartonfhir/{TAG}`.
-
-To add data to an image:
-1. Start an existing image with external folder mounted. That external folder will contain the data that the running image will use.
-   For example, if we start with the `hapi:r3-smart` image we could do something like:
-   ```sh
-   docker run -it -p 8080:8080 -v /absolute/path/to/my/local/data/folder:/data smartonfhir/hapi:r3-empty
-   ```
-   In this case the image will start a STU3 server but ignore it's pre-built data and use the external folder. If the external data folder is empty the server will have 0 patients...
-
-2. Insert some data using the FHIR HTTP API. The new data will appear in the mounted external folder and persist there even after the container is stopped.
-3. Stop the container (Ctrl+C or docker ps and docker stop {id})
-4. Re-build the image with the new data:
-   ```sh
-   docker build -t smartonfhir/hapi:my-tag --build-arg FHIR=dstu3 --build-arg DATA=/absolute/path/to/my/local/data/folder .
-   ```
-5. Test the image:
-   ```sh
-   docker run -it -p 8080:8080 smartonfhir/hapi:my-tag
-   ```
-6. Upload (update) the image:
-   ```sh
-   docker push smartonfhir/hapi:my-tag
-   ```
-
-### Examples
-The build command uses `--build-arg` to pass build-time arguments and this way
-perform different builds. The supported build-args are:
-- `DATA` - the path to the database data. If not provided the server will use an empty database.
-- `FHIR` - the fhir version. One of `dstu3`, `dstu2`.
-- `CLI_OPTS` - CLI args passed to java. Defaults to `-Xmx900m` but the memory might have to be increased for bigger databases.
-
-- R5 EMPTY
-    - **Not working yet.** Produces errors: Despite documentation, r5 option is unsupported by `run-server`
-    - **`build:`** `docker build -t hapi-r5:empty --build-arg FHIR=r5 .` // docker build -t hapi-r5:empty -f Dockerfile.r5 .
-    - **`run  :`** `docker run -it -p 8080:8080 hapi-r5:empty`
-    - **`push :`** `docker push smartonfhir/hapi-r5:empty`
-
-- R4 EMPTY
-    - **`build:`** `docker build -t smartonfhir/hapi:r4-empty --build-arg FHIR=r4 --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r4-empty`
-    - **`push :`** `docker push smartonfhir/hapi:r4-empty`
-
-- R4 SAMPLE
+This is a collection of Docker images containing a HAPI FHIR server configured to work with different FHIR versions and different pre-inserted data sets. The images are available on Docker Hub and can be used directly from there. These images can be used to run a HAPI server locally or as part of complex set ups like the [SMART Dev Sandbox](https://github.com/smart-on-fhir/smart-dev-sandbox).
 
 
-- R4 SYNTHEA
-    - **`build:`** `docker build -t smartonfhir/hapi:r4-synthea --build-arg FHIR=r4 --build-arg DATA=./databases/r4/synthea --build-arg CLI_OPTS=-Xmx1024m --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r4-synthea`
-    - **`push :`** `docker push smartonfhir/hapi:r4-synthea`
+## For Users
 
-- R3 EMPTY
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-empty --build-arg FHIR=dstu3 --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-empty`
-    - **`push :`** `docker push smartonfhir/hapi:r3-empty`
+To run a HAPI server use the following command:
+```sh
+docker run -it -p {PORT}:8080 smartonfhir/hapi-5:{TAG}
+```
+Replace the `{PORT}` with the port that you want the server to accessible at and `{TAG}` with the image that you want to use.
+The available tags are:
+- `r2-empty`   - DSTU2 FHIR server with an empty database
+- `r2-smart`   - STU3 FHIR server with 65 generated patients
+- `r2-synthea` - STU3 FHIR server with 1461 Synthea-generated patients
+- `r2-full`    - STU3 FHIR server with `r2-smart` and `r2-synthea` data combined
+- `r3-empty`   - STU3 FHIR server with an empty database
+- `r3-smart`   - STU3 FHIR server with 67 generated patients
+- `r3-pro`     - STU3 FHIR server with some questionnaires and responses from 100 de-identified patients
+- `r3-synthea` - STU3 FHIR server with 1461 Synthea patients
+- `r3-full`    - STU3 FHIR server with `r3-smart`, `r3-pro` and `r3-synthea` data combined
+- `r4-empty`   - R4 FHIR server with an empty database
+- `r4-synthea` - R4 FHIR server with 629 Synthea patients
+- `r5-empty`   - R5 FHIR server with an empty database
 
-- R3 SMART
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-smart --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/smart --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-smart`
-    - **`push :`** `docker push smartonfhir/hapi:r3-smart`
+### Persisting data
+The HAPI images are perfect for experimenting in development but if you want to
+modify the data or insert new patients, those changes will not be preserved after
+the container is shut down. To preserve the database across restarts, a Docker
+volume can be used. Example:
+```sh
+# Run this once to create a named volume
+docker volume create db
 
-- R3 SYNTHEA
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-synthea --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/synthea --build-arg CLI_OPTS=-Xmx1024m --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-synthea`
-    - **`push :`** `docker push smartonfhir/hapi:r3-synthea`
+# Then mount the database to it while starting the image
+docker run -it -p 8080:8080 -v db:/usr/local/tomcat/target/database smartonfhir/hapi-5:r3-full
+```
 
-- R3 SAMPLE
-    - **`build:`** `docker build -t smartonfhir/hapi:r3-sample --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/sample --build-arg CLI_OPTS=-Xmx1024m --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3-sample`
-    - **`push :`** `docker push smartonfhir/hapi:r3-sample`
+### Configuration
+Every image comes with a standard HAPI configuration file in which only the
+desired FHIR version is modified. In some cases, users may need to change
+other setting as well. For example, if you want to use SSL you would have
+to set up a domain, generate a certificate and use a proxy server like NginX
+or Apache that will pass requests to the upstream HAPI server. To make that
+work, you would have to "tell" HAPI what its base URL is so that it generates
+proper links in FHIR responses. To do so, you get a copy of the configuration
+file (`hapi.properties`) included in this repo for convenience. Then make
+sure you set `fhir_version` (replace `$FHIR_VERSION`) to what you need
+(`DSTU2`, `DSTU3`, `R4` or `R5`) and set `server_address` to the desired value.
+Once your config file is ready, put it in a folder and bind-mount it to `/config`:
 
-- R3 FULL
-    - **`build:`** `docker build -t smartonfhir/hapi:r3 --build-arg FHIR=dstu3 --build-arg DATA=./databases/r3/full --build-arg CLI_OPTS=-Xmx2048m --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r3`
-    - **`push :`** `docker push smartonfhir/hapi:r3`
+```sh
+docker run -it -p 8080:8080 -v /path/to/config-folder/:/config smartonfhir/hapi-5:r3-full
+```
 
-- R2 EMPTY
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-empty --build-arg FHIR=dstu2 --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-empty`
-    - **`push :`** `docker push smartonfhir/hapi:r2-empty`
-
-- R2 SMART
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-smart --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/smart --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-smart`
-    - **`push :`** `docker push smartonfhir/hapi:r2-smart`
-
-- R2 SYNTHEA
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-synthea --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/synthea --build-arg CLI_OPTS=-Xmx1024m --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-synthea`
-    - **`push :`** `docker push smartonfhir/hapi:r2-synthea`
-
-- R2 SAMPLE
-    - **`build:`** `docker build -t smartonfhir/hapi:r2-sample --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/sample --build-arg CLI_OPTS=-Xmx1024m --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2-sample`
-    - **`push :`** `docker push smartonfhir/hapi:r2-sample`
-
-- R2 FULL
-    - **`build:`** `docker build -t smartonfhir/hapi:r2 --build-arg FHIR=dstu2 --build-arg DATA=./databases/r2/full --build-arg CLI_OPTS=-Xmx2048m --squash .`
-    - **`run  :`** `docker run -it -p 8080:8080 smartonfhir/hapi:r2`
-    - **`push :`** `docker push smartonfhir/hapi:r2`
+## For Maintainers and Contributors
 
 
+To (re-)build an image you need to run `docker build` and provide a tag, fhir version and data directory.
+Examples:
+```sh
+# DSTU2
+sudo docker build -t smartonfhir/hapi-5:r2-empty   --build-arg FHIR_VERSION=DSTU2 --squash .
+sudo docker build -t smartonfhir/hapi-5:r2-smart   --build-arg FHIR_VERSION=DSTU2 --squash --build-arg DATABASE=r2-smart   .
+sudo docker build -t smartonfhir/hapi-5:r2-synthea --build-arg FHIR_VERSION=DSTU2 --squash --build-arg DATABASE=r2-synthea .
+sudo docker build -t smartonfhir/hapi-5:r2-full    --build-arg FHIR_VERSION=DSTU2 --squash --build-arg DATABASE=r2-full    .
 
-### WARNING!
-The folder /databases/r2/full/target contains some files that are bigger then the GitHub restrictions. These files cannot not be uploaded and you will not get anything when you clone or pull the project. Instead you can do the following:
-1. The biggest chunk of the data is already available so start with it by copying /databases/r2/synthea/target to /databases/r2/full/target
-2. Start the server - `docker run -it -p 8080:8080 -v /absolute/path/to/project/databases/r2/full/target:/data smartonfhir/hapi:r2-empty`
-3. Insert the dstu2-smart patients
-4. Insert the dstu2-custom data
+# DSTU3
+sudo docker build -t smartonfhir/hapi-5:r3-empty   --build-arg FHIR_VERSION=DSTU3 --squash .
+sudo docker build -t smartonfhir/hapi-5:r3-smart   --build-arg FHIR_VERSION=DSTU3 --squash --build-arg DATABASE=r3-smart   .
+sudo docker build -t smartonfhir/hapi-5:r3-pro     --build-arg FHIR_VERSION=DSTU3 --squash --build-arg DATABASE=r3-pro     .
+sudo docker build -t smartonfhir/hapi-5:r3-synthea --build-arg FHIR_VERSION=DSTU3 --squash --build-arg DATABASE=r3-synthea .
+sudo docker build -t smartonfhir/hapi-5:r3-full    --build-arg FHIR_VERSION=DSTU3 --squash --build-arg DATABASE=r3-full    .
+
+# R4
+sudo docker build -t smartonfhir/hapi-5:r4-empty   --build-arg FHIR_VERSION=R4 --squash .
+sudo docker build -t smartonfhir/hapi-5:r4-synthea --build-arg FHIR_VERSION=R4 --squash --build-arg DATABASE=r4-synthea .
+
+#R5
+sudo docker build -t smartonfhir/hapi-5:r5-empty   --build-arg FHIR_VERSION=R5 --squash .
+```
+
+NOTE:
+1. We use `--squash` to reduce the image size. To make that work, Docker needs to be started with experimental features enabled
+(`dockerd --experimental=true`).
+2. Some of the build examples above may not work properly. They assume that there is a database for every image. Unfortunately those databases are files that exceed the GitHub file size limit and cannot be pushed to the repository. See `.gitignore` for the list of the excluded databases. This means that those databases have to be created locally before the image can be rebuilt. To do so we have to make the following:
+    1. Start with an empty image for the desired FHIR version and use a volume to mount its database to the host FS:
+        ```sh
+        docker volume create db
+        docker run -it -p 8080:8080 -v db:/usr/local/tomcat/target/database smartonfhir/hapi-5:r3-empty
+        ```
+    2. Insert the desired data using the FHIR API and stop the container. The data is located at https://github.com/smart-on-fhir/generated-sample-data. You can use https://github.com/smart-on-fhir/tag-uploader to insert the data. Note that the DSTU-2/SMART patients are in XML so you should use https://github.com/smart-on-fhir/xml-bundle-uploader to upload those. Also, some of these patients are not compatible with HAPI v5. To exclude them you can rename the files to have extension other than `.xml` and then upload the whole folder. The files to exclude are `patient-2169591.fhir-bundle.xml` and `patient-99912345.fhir-bundle.xml`.
+    3. Find where the result database is:
+        ```sh
+        # inspect the volume to find our database location
+        docker volume inspect db
+
+        # This would look like:
+        # [
+        #     {
+        #         "CreatedAt": "2020-06-23T16:41:42-04:00",
+        #         "Driver": "local",
+        #         "Labels": {},
+        #         "Mountpoint": "/var/lib/docker/volumes/db/_data",
+        #         "Name": "db",
+        #         "Options": {},
+        #         "Scope": "local"
+        #     }
+        # ]
+        ```
+    4. Using the `Mountpoint` property above copy the result database to the project:
+        ```sh
+        sudo cp /var/lib/docker/volumes/db/_data/h2.mv.db ./databases/{tag}/h2.mv.db
+        ```
+    5. Build the image as shown above
+
+To run an image you should do `docker run -it -p {PORT}:8080 smartonfhir/hapi-5:{TAG}` replacing the {PORT} and {TAG} with whatever you need. Examples:
+```sh
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r2-empty
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r2-smart
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r2-synthea
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r2-full
+
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r3-empty
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r3-smart
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r3-pro
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r3-synthea
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r3-full
+
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r4-empty
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r4-synthea
+
+docker run -it -p 8080:8080 smartonfhir/hapi-5:r5-empty
+```
+
+To update an image use `docker push smartonfhir/{TAG}`. Examples:
+```sh
+docker push smartonfhir/hapi-5:r2-empty
+docker push smartonfhir/hapi-5:r2-smart
+docker push smartonfhir/hapi-5:r2-synthea
+docker push smartonfhir/hapi-5:r2-full
+
+docker push smartonfhir/hapi-5:r3-empty
+docker push smartonfhir/hapi-5:r3-smart
+docker push smartonfhir/hapi-5:r3-pro
+docker push smartonfhir/hapi-5:r3-synthea
+docker push smartonfhir/hapi-5:r3-full
+
+docker push smartonfhir/hapi-5:r4-empty
+docker push smartonfhir/hapi-5:r4-synthea
+
+docker push smartonfhir/hapi-5:r5-empty
+```
+
+
