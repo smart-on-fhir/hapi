@@ -1,7 +1,7 @@
 
 # These are too big to upload to GitHub
-database/r4-synthea/h2.mv.db
-database/r3-synthea/h2.mv.db
-database/r3-full/h2.mv.db
-database/r2-synthea/h2.mv.db
-database/r2-full/h2.mv.db
+databases/r4-synthea/h2.mv.db
+databases/r3-synthea/h2.mv.db
+databases/r3-full/h2.mv.db
+databases/r2-synthea/h2.mv.db
+databases/r2-full/h2.mv.db
