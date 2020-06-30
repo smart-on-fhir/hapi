@@ -1,7 +1,7 @@
 FROM hapiproject/hapi:base as build-hapi
 
 ARG HAPI_FHIR_URL=https://github.com/jamesagnew/hapi-fhir/
-ARG HAPI_FHIR_BRANCH=master
+ARG HAPI_FHIR_BRANCH=v5.0.0
 ARG HAPI_FHIR_STARTER_URL=https://github.com/hapifhir/hapi-fhir-jpaserver-starter/
 ARG HAPI_FHIR_STARTER_BRANCH=master
 
@@ -28,15 +28,19 @@ RUN apt-get update && apt-get install gettext-base -y
 
 ARG DATABASE=empty
 ARG IP=127.0.0.1
+ARG PORT=8080
 ARG FHIR_VERSION=R4
 ARG JAVA_OPTS=-Dhapi.properties=/config/hapi.properties
 
 ENV JAVA_OPTS=$JAVA_OPTS
 ENV IP=$IP
+ENV PORT=$PORT
 ENV FHIR_VERSION=$FHIR_VERSION
 ENV DATABASE=$DATABASE
+ENV HOST=localhost
 
 COPY ./databases/${DATABASE}/ /usr/local/tomcat/target/database/
+COPY ./server.xml  /tmp/server.xml
 
 RUN mkdir /config
 COPY ./hapi.properties  /tmp/hapi.properties.tpl
