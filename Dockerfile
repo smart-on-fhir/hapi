@@ -1,19 +1,50 @@
-FROM java:8
+FROM hapiproject/hapi:base as build-hapi
 
-ARG DATA=./databases/empty
-ARG FHIR=dstu3
-ARG CLI_OPTS=-Xmx900m
+ARG HAPI_FHIR_URL=https://github.com/jamesagnew/hapi-fhir/
+ARG HAPI_FHIR_BRANCH=v5.0.0
+ARG HAPI_FHIR_STARTER_URL=https://github.com/hapifhir/hapi-fhir-jpaserver-starter/
+ARG HAPI_FHIR_STARTER_BRANCH=master
 
-RUN mkdir /app
-RUN mkdir /data
-RUN echo "cd /data && CLI_OPTS='${CLI_OPTS}' /app/hapi-fhir-cli run-server --allow-external-refs --disable-referential-integrity -f ${FHIR} -p \${PORT:-8080}" > /app/cmd
+# Build HAPI
+RUN git clone --branch ${HAPI_FHIR_BRANCH} ${HAPI_FHIR_URL}
+WORKDIR /tmp/hapi-fhir/
+RUN /tmp/apache-maven-3.6.2/bin/mvn dependency:resolve
+RUN /tmp/apache-maven-3.6.2/bin/mvn install -DskipTests
 
-# COPY ./hapi-fhir-3.2.0-cli/* /app/
-ADD https://github.com/jamesagnew/hapi-fhir/releases/download/v3.2.0/hapi-fhir-3.2.0-cli.tar.bz2 /tmp/hapi-cli/
-RUN tar xvjf /tmp/hapi-cli/hapi-fhir-3.2.0-cli.tar.bz2 -C /app/
-RUN rm -rf /tmp/hapi-cli
-COPY $DATA /data
+# Build HAPI_FHIR_STARTER
+WORKDIR /tmp
+RUN git clone --branch ${HAPI_FHIR_STARTER_BRANCH} ${HAPI_FHIR_STARTER_URL}
+COPY ./tmpl-banner.html /tmp/hapi-fhir-jpaserver-starter/src/main/webapp/WEB-INF/templates/tmpl-banner.html
+COPY ./smart-logo.svg   /tmp/hapi-fhir-jpaserver-starter/src/main/webapp/img/smart-logo.svg
+WORKDIR /tmp/hapi-fhir-jpaserver-starter
+RUN /tmp/apache-maven-3.6.2/bin/mvn clean install -DskipTests
+
+FROM tomcat:9-jre11
+
+RUN mkdir -p /data/hapi/lucenefiles && chmod 775 /data/hapi/lucenefiles
+COPY --from=build-hapi /tmp/hapi-fhir-jpaserver-starter/target/*.war /usr/local/tomcat/webapps/
+
+RUN apt-get update && apt-get install gettext-base -y
+
+ARG DATABASE=empty
+ARG IP=127.0.0.1
+ARG PORT=8080
+ARG FHIR_VERSION=R4
+ARG JAVA_OPTS=-Dhapi.properties=/config/hapi.properties
+
+ENV JAVA_OPTS=$JAVA_OPTS
+ENV IP=$IP
+ENV PORT=$PORT
+ENV FHIR_VERSION=$FHIR_VERSION
+ENV DATABASE=$DATABASE
+ENV HOST=localhost
+
+COPY ./databases/${DATABASE}/ /usr/local/tomcat/target/database/
+COPY ./server.xml  /tmp/server.xml
+
+RUN mkdir /config
+COPY ./hapi.properties  /tmp/hapi.properties.tpl
 
 EXPOSE 8080
 
-CMD bash /app/cmd
+CMD envsubst < /tmp/hapi.properties.tpl > /config/hapi.properties && catalina.sh run
